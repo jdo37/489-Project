@@ -9,6 +9,20 @@ router.get('/', (req, res) => {
     res.render("Dashboard", {questionsLen: questionsLen})
 });
 
+// Route for the Records page
+router.get('/Records', (req, res) => {
+    console.log("Records page accessed");
+    res.render("Records")
+});
+
+// Route for the Submit page
+router.get('/Submit', (req, res) => {
+    console.log("Submit question page accessed");
+    res.render("SubmitQuestion")
+});
+
+
+
 // Post request from when the submit button gets pressed
 router.post('/', (req, res) => {
     console.log("Post MEthod")

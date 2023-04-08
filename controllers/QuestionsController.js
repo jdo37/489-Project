@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { questions } = require('../models/Questions');
+const {questions}  = require('../models/Questions');
 
 // Route for the main page
 router.get('/', (req, res) => {
@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 // Route for the Records page
 router.get('/Records', (req, res) => {
     console.log("Records page accessed");
-    res.render("Records")
+    res.render("Records", { questions: questions });
 });
 
 // Route for the Submit page
@@ -21,11 +21,20 @@ router.get('/Submit', (req, res) => {
     res.render("SubmitQuestion")
 });
 
-
-
-// Post request from when the submit button gets pressed
-router.post('/', (req, res) => {
-    console.log("Post MEthod")
+// POST route for submitting a question
+router.post('/submitQuestion', (req, res) => {
+    // Retrieve the question from the form
+    const newQuestion = {
+        id: `q${questions.length + 1}`,
+        question: req.body.question,
+        answers: []
+    };
+    // Add the question to the questions array
+    questions.push(newQuestion);
+    console.log("New question added: ", newQuestion);
+    // Redirect the user back to the Submit page
+    res.redirect('/Submit');
 });
 
 module.exports = router;
+

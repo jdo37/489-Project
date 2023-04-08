@@ -21,6 +21,24 @@
       </nav>
       <main>
         <H1>Records</H1>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Question</th>
+              <th>Answers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% questions.forEach(function(question) { %>
+            <tr>
+              <td><%= question.id %></td>
+              <td><%= question.question %></td>
+              <td><%= question.answers.join(", ") %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </main>
     </div>
   </body>

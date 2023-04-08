@@ -8,6 +8,7 @@ const app = express();
 
 // Set up the view engine
 app.set('view engine', 'ejs');
+console.log(app.get('view engine'))
 
 // Body parsing middleware
 app.use(express.urlencoded({ extended: true }));

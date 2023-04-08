@@ -22,6 +22,13 @@
       <main>
         <H1>Submit Your Question!</H1>
         <h2>What would you like to ask the world?</h2>
+        <form action="/submitQuestion" method="POST">
+          <label for="question">Question:</label>
+          <input type="text" id="question" name="question" required>
+          <br>
+          <button type="submit">Save</button>
+        </form>
+      
       </main>
     </div>
   </body>

@@ -20,7 +20,8 @@ app.use(express.static(__dirname + '/public'));
 // Set up routes using controller files
 const QuestionsController = require('./controllers/QuestionsController');
 app.use('/', QuestionsController);
-
+const Login = require('./controllers/Login')
+app.use('/', Login);
 // Listen to requests from clients
 app.listen(3000, () => {
     console.log('Server listening on port 3000');

@@ -31,6 +31,7 @@ router.post('/submitQuestion', (req, res) => {
     };
     // Add the question to the questions array
     questions.push(newQuestion);
+    newQuestion.answers.push(req.body.answers);
     console.log("New question added: ", newQuestion);
     // Redirect the user back to the Submit page
     res.redirect('/Submit');

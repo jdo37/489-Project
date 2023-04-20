@@ -6,7 +6,9 @@
 const express = require('express');
 const app = express();
 const sequelize = require('./db')
-const User = require('./models/User')
+const User = require('./models/user')
+const Poll = require('./models/poll')
+const Answer = require('./models/answer')
 
 // Set up the view engine
 app.set('view engine', 'ejs');
@@ -30,7 +32,22 @@ app.listen(3000, () => {
 });
 
 async function setup() {
-    const jason = await User.create({email: "jason@gmail.com", username: "jason", password: "1234", gender: "Male", continent: "North America" })
+    const jason = await User.create({ email: "jason@gmail.com", username: "jason", password: "1234", gender: "Male", continent: "North America" });
+
+    // Create default poll questions
+    const poll1 = await Poll.create({ question: 'What is your favorite color?' });
+    const poll2 = await Poll.create({ question: 'What is your favorite sport?' });
+
+    // Create default poll answers
+    const poll1Answer1 = await Answer.create({ answer: 'Red', pollId: poll1.id });
+    const poll1Answer2 = await Answer.create({ answer: 'Blue', pollId: poll1.id });
+    const poll1Answer3 = await Answer.create({ answer: 'Green', pollId: poll1.id });
+    const poll1Answer4 = await Answer.create({ answer: 'Yellow', pollId: poll1.id });
+
+
+    const poll2Answer1 = await Answer.create({ answer: 'Football', pollId: poll2.id });
+    const poll2Answer2 = await Answer.create({ answer: 'Basketball', pollId: poll2.id });
+    const poll2Answer3 = await Answer.create({ answer: 'Tennis', pollId: poll2.id });
 }
 
 sequelize.sync({force: true}).then(() =>{

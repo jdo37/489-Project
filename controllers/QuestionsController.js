@@ -1,12 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const {questions}  = require('../models/Questions');
+const {questions}  = require('../models/question');
+const Poll = require('../models/poll');
+const Answer = require('../models/answer');
+
+
 
 // Route for the main page
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     console.log("main get function was accessed");
-    const questionsLen = questions.length;
-    res.render("Dashboard", {questionsLen: questionsLen})
+    console.log(Poll);
+    try {
+        const poll = await Poll.findOne(); // fetch the first poll
+        const answers = await Answer.findAll({ where: { pollId: poll.id } }); // fetch all answers for the poll
+        const data = answers.map((answer) => ({
+            answer: answer.answer,
+            vote_count: answer.vote_count,
+          }));
+        res.render('dashboard', { poll, answers, data }); // pass the poll to the dashboard view
+      } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+      }
 });
 
 // Route for the Records page

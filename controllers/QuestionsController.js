@@ -24,25 +24,31 @@ router.get('/Submit', (req, res) => {
 // POST route for submitting a question
 router.post('/submitQuestion', (req, res) => {
     // Retrieve the question from the form
-  const newQuestion = {
-    id: `q${questions.length + 1}`,
-    question: req.body.question,
-    answers: []
-  };
 
-  // Iterate over the answers in the form data and create an answer object for each one
-  for (let i = 0; i < req.body.answers.length; i++) {
-    const answer = {
-      key: req.body.answers[i],
-      ansCount: 0
+    const newQuestion = {
+      id: `q${questions.length + 1}`,
+      question: req.body.question,
+      answers: []
     };
-    newQuestion.answers.push(answer);
-  }
-
-  console.log("New question added: ", newQuestion);
-  // Redirect the user back to the Submit page
-  res.redirect('/Submit');
+  
+    // Iterate over the answers in the form data and create an answer object for each one
+    for (let i = 0; i < req.body.answers.length; i++) {
+      const answer = {
+        key: req.body.answers[i],
+        ansCount: 0
+      };
+      newQuestion.answers.push(answer);
+    }
+  
+    // Add the new question to the questions array
+    questions.push(newQuestion);
+  
+    console.log("New question added: ", newQuestion);
+  
+    // Redirect the user to the Records page with the updated questions
+    res.redirect('/Records');
   });
+  
   
 
 module.exports = router;

@@ -87,3 +87,63 @@ p {
   font-size: 18px;
   color: #333;
 }
+#question-form button {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+label[for="question"] {
+  font-size: 24px;
+  font-weight: bold;
+}
+input[name="answers"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+#message {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  display: none;
+}
+
+/*records CSS Added Here*/
+/* Add borders to the table cells */
+th, td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Add a background color to every other row in the table */
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+/* Style the display-answer-btn button */
+.display-answer-btn {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+/* Hide the answer element by default */
+.answer {
+  display: none;
+}
+
+/* Show the answer element when the display-answer-btn button is clicked */
+.display-answer-btn:hover + .answer {
+  display: block;
+}

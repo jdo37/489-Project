@@ -32,43 +32,44 @@
           <tbody>
             <% questions.forEach(function(question) { %>
             <tr>
-                <td><%= question.id %></td>
-                <td><%= question.question %></td>
-                <td>
-                    
-                    <button class="display-answer-btn" data-answer="<%= question.answers.join(", ") %>">
-                        view results
-                    </button>
-                </td>
+              <td><%= question.id %></td>
+              <td><%= question.question %></td>
+              <td>
+                <button
+                  class="display-answer-btn"
+                  data-answer="<% question.answers.forEach(function(ans){ %><%= ans.key %> : <%= ans.ansCount %>, <% }); %>"
+                >
+                  view results
+                </button>
+              </td>
             </tr>
             <% }) %>
-        </tbody>
-        
+          </tbody>
         </table>
       </main>
     </div>
     <script>
       // Select all the display-answer-btn buttons
-      const displayAnswerBtns = document.querySelectorAll(".display-answer-btn");
-      
+      const displayAnswerBtns = document.querySelectorAll(
+        ".display-answer-btn"
+      );
+
       // Add event listeners to each button
-      displayAnswerBtns.forEach(btn => {
-          btn.addEventListener("click", () => {
-              // Retrieve the answer from the data-answer attribute
-              const answer = btn.getAttribute("data-answer");
-              
-              // Create a new element to display the answer
-              const answerEl = document.createElement("div");
-              answerEl.innerText = `Answer: ${answer}`;
-              
-              // Append the answer element to the button's parent element
-              btn.parentNode.appendChild(answerEl);
-              
-              // Hide the button after the answer is displayed
-              btn.style.display = "none";
-          });
+      displayAnswerBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // Retrieve the answer from the data-answer attribute
+          const answer = btn.getAttribute("data-answer");
+
+          const answerEl = document.createElement("div");
+          answerEl.innerHTML = `Answer: ${answer}`;
+
+          // Append the answer element to the button's parent element
+          btn.parentNode.appendChild(answerEl);
+
+          // Hide the button after the answer is displayed
+          btn.style.display = "none";
+        });
       });
-  </script>
-  
+    </script>
   </body>
 </html>

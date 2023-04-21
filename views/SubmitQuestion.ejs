@@ -1,8 +1,32 @@
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>My Page</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <script>
+      function addAnswer() {
+        // Create a new input element for the answer
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "answers[]"; // Use array notation for the name to handle multiple answers - dont erase aray
+        input.required = true;
+
+        // Create a new label element for the answer
+        var label = document.createElement("label");
+        label.for = input.name;
+        label.innerHTML = "Answer:";
+
+        // Create a new div element for the answer container
+        var answerContainer = document.createElement("div");
+        answerContainer.appendChild(label);
+        answerContainer.appendChild(input);
+
+        // Add the answer container to the form
+        var form = document.getElementById("question-form");
+        form.insertBefore(answerContainer, form.lastElementChild);
+      }
+    </script>
   </head>
   <body>
     <header>
@@ -20,21 +44,27 @@
         </ul>
       </nav>
       <main>
-        <H1>Submit Your Question!</H1>
+        <h1>Submit Your Question!</h1>
         <h2>What would you like to ask the world?</h2>
-        <form action="/submitQuestion" method="POST">
+        <form id="question-form" action="/submitQuestion" method="POST">
           <label for="question">Question:</label>
-          <input type="text" id="question" name="question" required>
-          <br>
-          <label for="answers">Answers:</label>
-          <input type="text" id="answers" name="answers" required>
-          <br>
+          <input type="text" id="question" name="question" required />
+          <br />
+
+          <div id="answers-container"></div>
+          <button type="button" onclick="addAnswer()">Add Answer +</button>
+          <br />
+          <input
+            type="hidden"
+            id="selected-answer-count"
+            name="selectedAnswerCount"
+            value="0"
+          />
           <button type="submit">Save</button>
         </form>
-        <div id="message" style="display:none;">Question was submitted!</div>
-      
+
+        <div id="message" style="display: none">Question was submitted!</div>
       </main>
     </div>
-    
   </body>
 </html>

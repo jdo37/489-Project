@@ -43,5 +43,9 @@ Vote.init(
 
 User.belongsToMany(Poll, { through: Vote, foreignKey: 'userId' });
 Poll.belongsToMany(User, { through: Vote, foreignKey: 'pollId' });
+Vote.belongsTo(Answer, { foreignKey: 'answerId' });
+Answer.hasMany(Vote, { foreignKey: 'answerId' });
+
+
 
 module.exports = Vote;

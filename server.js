@@ -9,6 +9,8 @@ const sequelize = require('./db')
 const User = require('./models/user')
 const Poll = require('./models/poll')
 const Answer = require('./models/answer')
+const Vote = require('./models/vote');
+
 
 // Set up the view engine
 app.set('view engine', 'ejs');
@@ -33,6 +35,15 @@ app.listen(3000, () => {
 
 async function setup() {
     const jason = await User.create({ email: "jason@gmail.com", username: "jason", password: "1234", gender: "Male", continent: "North America" });
+    const tony = await User.create({ email: "tony@gmail.com", username: "tonybalony", password: "1234", gender: "Male", continent: "South America" });
+    const julie = await User.create({ email: "julie@gmail.com", username: "julie", password: "1234", gender: "Female", continent: "Europe" });
+
+    const amy = await User.create({ email: "amy@gmail.com", username: "amy123", password: "1234", gender: "Female", continent: "Asia" });
+    const mike = await User.create({ email: "mike@gmail.com", username: "mikemike", password: "1234", gender: "Male", continent: "North America" });
+    const hannah = await User.create({ email: "hannah@gmail.com", username: "hannahbanana", password: "1234", gender: "Female", continent: "Australia" });
+    const max = await User.create({ email: "max@gmail.com", username: "maxmax", password: "1234", gender: "Male", continent: "Africa" });
+    const lisa = await User.create({ email: "lisa@gmail.com", username: "lisalisa", password: "1234", gender: "Female", continent: "Europe" });
+
 
     // Create default poll questions
     const poll1 = await Poll.create({ question: 'What is your favorite color?' });
@@ -45,12 +56,30 @@ async function setup() {
     const poll1Answer4 = await Answer.create({ answer: 'Yellow', pollId: poll1.id });
 
 
+    // Create default poll answers for second poll
     const poll2Answer1 = await Answer.create({ answer: 'Football', pollId: poll2.id });
     const poll2Answer2 = await Answer.create({ answer: 'Basketball', pollId: poll2.id });
     const poll2Answer3 = await Answer.create({ answer: 'Tennis', pollId: poll2.id });
+
+    // Create default votes for poll 1
+    const poll1Answer1Vote1 = await Vote.create({ userId: jason.username, pollId: poll1.id ,answerId: poll1Answer1.id });
+    const poll1Answer1Vote2 = await Vote.create({ userId: tony.username, pollId: poll1.id ,answerId: poll1Answer2.id });
+    const poll1Answer1Vote3 = await Vote.create({ userId: julie.username, pollId: poll1.id ,answerId: poll1Answer1.id });
+    const poll1Answer1Vote4 = await Vote.create({ userId: amy.username, pollId: poll1.id ,answerId: poll1Answer3.id });
+    const poll1Answer1Vote5 = await Vote.create({ userId: mike.username, pollId: poll1.id ,answerId: poll1Answer3.id });
+    const poll1Answer1Vote6 = await Vote.create({ userId: hannah.username, pollId: poll1.id ,answerId: poll1Answer3.id });
+    const poll1Answer1Vote7 = await Vote.create({ userId: max.username, pollId: poll1.id ,answerId: poll1Answer4.id });
+    const poll1Answer1Vote8 = await Vote.create({ userId: lisa.username, pollId: poll1.id ,answerId: poll1Answer4.id });
+
+    console.log(poll1.id) //  checking the id of polls 1 asnd 2
+    console.log(poll2.id)
+
+
+
+      
 }
 
 sequelize.sync({force: true}).then(() =>{
     console.log("Sequelize Sync Complete...")
-    setup().then(() => console.log("User created"))
+    setup().then(() => console.log("User, polls, answers and vote created"))
 })

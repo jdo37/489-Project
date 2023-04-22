@@ -6,11 +6,18 @@
 const express = require('express');
 const app = express();
 const sequelize = require('./db')
+const session = require('express-session')
 const User = require('./models/user')
 const Poll = require('./models/poll')
 const Answer = require('./models/answer')
 const Vote = require('./models/vote');
 
+app.use(session({
+    secret: 'wsu489',
+    resave: false,
+    saveUnitialized: true,
+    cookie: { secure: false }
+}))
 
 // Set up the view engine
 app.set('view engine', 'ejs');

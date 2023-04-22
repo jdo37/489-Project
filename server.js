@@ -22,6 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 // Directory middleware
 app.use(express.static(__dirname + '/public'));
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Set up routes using controller files
 const QuestionsController = require('./controllers/QuestionsController');

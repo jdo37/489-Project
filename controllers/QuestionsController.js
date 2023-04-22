@@ -5,6 +5,7 @@ const {questions}  = require('../models/question');
 const Poll = require('../models/poll');
 const Answer = require('../models/answer');
 const Vote = require('../models/vote');
+const { v4: uuidv4 } = require('uuid');
 
 
 
@@ -45,34 +46,55 @@ router.get('/Submit', (req, res) => {
     res.render("SubmitQuestion")
 });
 
+/*
 // POST route for submitting a question
-router.post('/submitQuestion', (req, res) => {
-    // Retrieve the question from the form
+router.post("/submitQuestion", (req, res) => {
 
-    const newQuestion = {
-      id: `q${questions.length + 1}`,
-      question: req.body.question,
-      answers: []
-    };
+
+  console.log("im backend, putting new poll in database!");
+
+  const question = req.body.question;
+  const answers = req.body.answers;
   
-    // Iterate over the answers in the form data and create an answer object for each one
-    for (let i = 0; i < req.body.answers.length; i++) {
-      const answer = {
-        key: req.body.answers[i],
-        ansCount: 0
-      };
-      newQuestion.answers.push(answer);
+  console.log("Question for be:", question);
+  console.log("Answers for be:", answers);
+
+  console.log("here is the data in backend i got: ",req.body);
+  res.redirect("/Records");
+});
+  */
+
+// POST route for submitting a question
+router.post("/submitQuestion", async (req, res) => {
+  try {
+    console.log("im backend, putting new poll in database!");
+
+    const question = req.body.question;
+    const answers = req.body.answers;
+    const pollId = uuidv4(); // generate a unique ID for the question using uuidv4
+  
+    console.log("Question for be:", question);
+    console.log("Answers for be:", answers);
+  
+    console.log("here is the data in backend i got: ",req.body);
+
+    const poll = await Poll.create({ question, pollId }); // create a new poll with the question and the unique ID
+    console.log("New poll created:", poll);
+
+    // loop through the answers and create a new Answer object for each one, with the pollId set to the ID of the new poll
+    for (const answer of answers) {
+      const newAnswer = await Answer.create({ answer, pollId: poll.id });
+      console.log("New answer created:", newAnswer);
     }
-  
-    // Add the new question to the questions array
-    questions.push(newQuestion);
-  
-    console.log("New question added: ", newQuestion);
-  
-    // Redirect the user to the Records page with the updated questions
-    res.redirect('/Records');
-  });
-  
+
+    res.redirect("/Records");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while submitting the question.");
+  }
+});
+
+
   
 
 module.exports = router;

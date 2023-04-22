@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>My Page</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       function addAnswer() {
         // Create a new input element for the answer
@@ -26,6 +26,31 @@
         var form = document.getElementById("question-form");
         form.insertBefore(answerContainer, form.lastElementChild);
       }
+
+      //create a function to call the backend w/ endpoint /submitquestion
+      const postPoll = async () => {
+        try {
+          const questionInput = document.getElementById("question");
+          const answerInputs = document.getElementsByName("answers[]");
+
+          const answers = [];
+          for (const answerInput of answerInputs) {
+            answers.push(answerInput.value);
+          }
+
+          const response = await axios.post(
+            "http://localhost:3000/submitQuestion",
+            {
+              question: questionInput.value,
+              answers: answers,
+            }
+          );
+
+          //console.log("response:", response.data);
+        } catch (error) {
+          console.error("error:", error);
+        }
+      };
     </script>
   </head>
   <body>
@@ -60,7 +85,7 @@
             name="selectedAnswerCount"
             value="0"
           />
-          <button type="submit">Save</button>
+          <button type="button" onclick="postPoll()">Submit Poll</button>
         </form>
 
         <div id="message" style="display: none">Question was submitted!</div>

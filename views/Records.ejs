@@ -37,7 +37,8 @@
               <td>
                 <button
                   class="display-answer-btn"
-                  data-answer="<% question.answers.forEach(function(ans){ %><%= ans.key %> : <%= ans.ansCount %>, <% }); %>"
+                  data-answer="<% question.answers.forEach(function(ans){ %><%= ans %>, <% }); %>"
+
                 >
                   view results
                 </button>

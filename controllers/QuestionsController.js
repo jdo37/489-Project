@@ -34,35 +34,48 @@ router.get('/', async (req, res) => {
       }
 });
 
-// Route for the Records page
-router.get('/Records', (req, res) => {
-    console.log("Records page accessed");
-    res.render("Records", { questions: questions});
+// // Route for the Records page
+// router.get('/Records', (req, res) => {
+//     console.log("Records page accessed");
+//     res.render("Records", { questions: questions});
+// });
+// Route handler for /Records endpoint
+router.get('/Records', async (req, res) => {
+  try {
+    console.log("in record BE");
+    // Fetch all the polls from the database
+    const polls = await Poll.findAll({ include: Answer });
+
+    // Create an array to hold the questions and answers
+    const questions = [];
+
+    // Loop through each poll and extract the question and associated answers
+    polls.forEach(poll => {
+      const question = {
+        id: poll.id,
+        question: poll.question,
+        answers: poll.Answers.map(answer => answer.answer)
+      };
+      questions.push(question);
+      console.log("logging data BE req:",question);
+    });
+
+    // Render the Records page and pass the questions array as a parameter
+    res.render('Records', { questions });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while fetching the questions.');
+  }
 });
+
+// Route handler for /Records endpoint
+
 
 // Route for the Submit page
 router.get('/Submit', (req, res) => {
     console.log("Submit question page accessed");
     res.render("SubmitQuestion")
 });
-
-/*
-// POST route for submitting a question
-router.post("/submitQuestion", (req, res) => {
-
-
-  console.log("im backend, putting new poll in database!");
-
-  const question = req.body.question;
-  const answers = req.body.answers;
-  
-  console.log("Question for be:", question);
-  console.log("Answers for be:", answers);
-
-  console.log("here is the data in backend i got: ",req.body);
-  res.redirect("/Records");
-});
-  */
 
 // POST route for submitting a question
 router.post("/submitQuestion", async (req, res) => {

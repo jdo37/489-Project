@@ -19,6 +19,11 @@ app.use(session({
     cookie: { secure: false }
 }))
 
+app.use(function(req, res, next) {
+    res.locals.user = req.session.user
+    next();
+  });
+
 // Set up the view engine
 app.set('view engine', 'ejs');
 console.log(app.get('view engine'))

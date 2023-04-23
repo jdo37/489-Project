@@ -3,21 +3,7 @@ const bcrypt = require('bcrypt')
 const { Model, DataTypes } = require('sequelize');
 
 class User extends Model {
-  static async findUser(username, password) {
-    try {
-      const user = await User.findByPk(username);
-      bcrypt.compare(password, user.password, function(err, result) {
-        if (result) {
-          return user;
-        } else {
-          return null;
-        }
-      })
-    }
-    catch(err) {
-      console.log(err)
-    }
-  }
+
 }
 
 User.init(

@@ -3,16 +3,17 @@
     <!-- Sidebar -->
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse navbar-dark">
         <div class="position-sticky">
-                <div class="list-group list-group-flush mx-3 mt-4">
-                    
-                    <a href="/" class="list-group-item list-group-item-action list-group-item-dark" aria-current="true">
-                        Dashboard
-                    </a>
-                    <a href="/Records" class="list-group-item list-group-item-action list-group-item-dark">
-                        Records
-                    </a>
-                    <a href="/Submit" class="list-group-item list-group-item-action list-group-item-dark">Submit Question</a>
-                </div>
+            <div class="list-group list-group-flush mx-3 mt-4">
+
+                <a href="/" class="list-group-item list-group-item-action list-group-item-dark" aria-current="true">
+                    Dashboard
+                </a>
+                <a href="/Records" class="list-group-item list-group-item-action list-group-item-dark">
+                    Records
+                </a>
+                <a href="/Submit" class="list-group-item list-group-item-action list-group-item-dark">Submit
+                    Question</a>
+            </div>
         </div>
     </nav>
     <!-- Sidebar -->
@@ -34,12 +35,21 @@
 
             <!-- Right links -->
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                  </li>
+                <% if(user) { %>
+                    <span class="navbar-text">
+                        <%- user.username -%>
+                      </span>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                <% } %>
             </ul>
         </div>
         <!-- Container wrapper -->

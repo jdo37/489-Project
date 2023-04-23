@@ -33,10 +33,7 @@
                 <%= question.question %>
               </td>
               <td>
-                <button class="display-answer-btn"
-                  data-answer="<% question.answers.forEach(function(ans){ %><%= ans.key %> : <%= ans.ansCount %>, <% }); %>">
-                  view results
-                </button>
+                <button class="display-answer-btn" data-answer="<%= question.answers.join(', ') %>">view results</button>
               </td>
             </tr>
             <% }) %>

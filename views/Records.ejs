@@ -12,34 +12,39 @@
 </head>
 <body>
   <%- include('nav') -%>
-    <main style="margin-top:8%">
-      <H1>Records</H1>
-      <hr>
-      <table>
-        <thead>
+  <main style="margin-top:8%">
+    <H1>Records</H1>
+    <hr>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Question</th>
+          <th>Answers</th>
+          <th>Vote Counts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% questions.forEach(function(question) { %>
           <tr>
-            <th>ID</th>
-            <th>Question</th>
-            <th>Answers</th>
+            <td>
+              <%= question.id %>
+            </td>
+            <td>
+              <%= question.question %>
+            </td>
+            <td>
+              <button class="display-answer-btn" data-answer="<%= question.answers.join(', ') %>">view results</button>
+            </td>
+            <td>
+              <%= question.vote_counts.join(', ') %>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <% questions.forEach(function(question) { %>
-            <tr>
-              <td>
-                <%= question.id %>
-              </td>
-              <td>
-                <%= question.question %>
-              </td>
-              <td>
-                <button class="display-answer-btn" data-answer="<%= question.answers.join(', ') %>">view results</button>
-              </td>
-            </tr>
-            <% }) %>
-        </tbody>
-      </table>
-    </main>
+          <% }) %>
+      </tbody>
+    </table>
+  </main>
+  
     </div>
     <script>
       // Select all the display-answer-btn buttons

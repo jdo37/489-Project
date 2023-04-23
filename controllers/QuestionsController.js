@@ -35,6 +35,7 @@ router.get('/', async (req, res) => {
 });
 
 // Route handler for /Records endpoint
+/*
 router.get('/Records', async (req, res) => {
   try {
     console.log("in record BE");
@@ -62,6 +63,50 @@ router.get('/Records', async (req, res) => {
     res.status(500).send('An error occurred while fetching the questions.');
   }
 });
+*/
+// Route for the Records page
+router.get('/Records', async (req, res) => {
+  try {
+    console.log("in record BE");
+    // Fetch all the polls from the database
+    const polls = await Poll.findAll({ include: Answer });
+
+    // Create an array to hold the questions and answers
+    const questions = [];
+
+    // Loop through each poll and extract the question and associated answers
+    for (let i = 0; i < polls.length; i++) {
+      const poll = polls[i];
+      const answers = await Answer.findAll({ where: { pollId: poll.id } }); // fetch all answers for the poll
+      const voteData = await Vote.findAll({
+        where: { pollId: poll.id },
+        include: { model: Answer }
+      });
+      // extract vote counts for each answer
+      const voteCounts = answers.map(answer => ({
+        answer: answer.answer,
+        vote_count: voteData.filter(vote => vote.Answer.id === answer.id).length
+      }));
+    
+      const question = {
+        id: poll.id,
+        question: poll.question,
+        answers: voteCounts.map(voteCount => voteCount.answer),
+        vote_counts: voteCounts.map(voteCount => voteCount.vote_count)
+      };
+      questions.push(question);
+      console.log("logging data BE req:", question);
+    }
+
+    // Render the Records page and pass the questions array as a parameter
+    res.render('Records', { questions });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while fetching the questions.');
+  }
+});
+
+
 
 
 // Route for the Submit page

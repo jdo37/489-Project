@@ -34,11 +34,6 @@ router.get('/', async (req, res) => {
       }
 });
 
-// // Route for the Records page
-// router.get('/Records', (req, res) => {
-//     console.log("Records page accessed");
-//     res.render("Records", { questions: questions});
-// });
 // Route handler for /Records endpoint
 router.get('/Records', async (req, res) => {
   try {
@@ -67,9 +62,6 @@ router.get('/Records', async (req, res) => {
     res.status(500).send('An error occurred while fetching the questions.');
   }
 });
-
-
-// Route handler for /Records endpoint
 
 
 // Route for the Submit page

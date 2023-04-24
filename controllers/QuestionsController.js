@@ -16,7 +16,27 @@ router.get('/', async (req, res) => {
     try {
         const poll = await Poll.findOne(); // fetch the first poll
         const answers = await Answer.findAll({ where: { pollId: poll.id } }); // fetch all answers for the poll
-        
+                
+        // Check if the user has already voted
+        var userHasVoted = false;
+        var userVoteAnswer = "no answer yet";
+        var userIsSignedIn = false;
+
+        if (req.session.user) {
+          const userVote = await Vote.findOne({
+            where: { pollId: poll.id, userId: req.session.user.username },
+            include: { model: Answer }
+          });
+          if (userVote) {
+            userHasVoted = true;
+            userVoteAnswer = userVote.Answer.answer;
+          }
+          userIsSignedIn = true;
+        }
+
+        console.log(userHasVoted);
+        console.log(userVoteAnswer);
+
         const voteData = await Vote.findAll({
             where: { pollId: poll.id },
             include: { model: Answer }
@@ -28,7 +48,7 @@ router.get('/', async (req, res) => {
             vote_count: voteData.filter((vote) => vote.Answer.id === answer.id).length,
           }));
           
-        res.render('dashboard', { poll, data }); // pass the poll to the dashboard view
+        res.render('dashboard', { poll, data, userHasVoted, userVoteAnswer, userIsSignedIn }); // pass the poll to the dashboard view
       } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');

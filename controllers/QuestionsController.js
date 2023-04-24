@@ -68,35 +68,120 @@ router.post('/polls/:id/vote', async (req, res) => {
 });
 
 
-// Route for the Records page
-router.get('/Records', (req, res) => {
-    console.log("Records page accessed");
-    res.render("Records", { questions: questions});
+router.post('/polls/:id/vote', async (req, res) => {
+  const pollId = req.params.id;
+  const selectedAnswer = req.body.selectedAnswer;
+
+  console.log(selectedAnswer);
+  console.log(pollId);
+  console.log(req.session.user)
+
+  try {
+    // Find the answer object that matches the selected answer
+    const answer = await Answer.findOne({
+      where: { pollId: pollId, answer: selectedAnswer }
+    });
+
+    // Increment the vote count for the answer
+    answer.vote_count++;
+    await answer.save();
+
+    // Create a new vote object in the database
+    await Vote.create({
+      userId: req.session.user.username,
+      pollId: pollId,
+      answerId: answer.id
+    });
+
+    res.redirect('/');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
+
+// Route for the Records page
+// Route handler for /Records endpoint
+/*
+router.get('/Records', async (req, res) => {
+  try {
+    console.log("in record BE");
+    // Fetch all the polls from the database
+    const polls = await Poll.findAll({ include: Answer });
+
+    // Create an array to hold the questions and answers
+    const questions = [];
+
+    // Loop through each poll and extract the question and associated answers
+    polls.forEach(poll => {
+      const question = {
+        id: poll.id,
+        question: poll.question,
+        answers: poll.Answers.map(answer => answer.answer)
+      };
+      questions.push(question);
+      console.log("logging data BE req:",question);
+    });
+
+    // Render the Records page and pass the questions array as a parameter
+    res.render('Records', { questions });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while fetching the questions.');
+  }
+});
+*/
+// Route for the Records page
+router.get('/Records', async (req, res) => {
+  try {
+    console.log("in record BE");
+    // Fetch all the polls from the database
+    const polls = await Poll.findAll({ include: Answer });
+
+    // Create an array to hold the questions and answers
+    const questions = [];
+
+    // Loop through each poll and extract the question and associated answers
+    for (let i = 0; i < polls.length; i++) {
+      const poll = polls[i];
+      const answers = await Answer.findAll({ where: { pollId: poll.id } }); // fetch all answers for the poll
+      const voteData = await Vote.findAll({
+        where: { pollId: poll.id },
+        include: { model: Answer }
+      });
+      // extract vote counts for each answer
+      const voteCounts = answers.map(answer => ({
+        answer: answer.answer,
+        vote_count: voteData.filter(vote => vote.Answer.id === answer.id).length
+      }));
+    
+      const question = {
+        id: poll.id,
+        question: poll.question,
+        answers: voteCounts.map(voteCount => voteCount.answer),
+        vote_counts: voteCounts.map(voteCount => voteCount.vote_count)
+      };
+      questions.push(question);
+      console.log("logging data BE req:", question);
+    }
+
+    // Render the Records page and pass the questions array as a parameter
+    res.render('Records', { questions });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while fetching the questions.');
+  }
+});
+
+
+
 
 // Route for the Submit page
 router.get('/Submit', (req, res) => {
     console.log("Submit question page accessed");
     res.render("SubmitQuestion")
 });
-
-/*
-// POST route for submitting a question
-router.post("/submitQuestion", (req, res) => {
-
-
-  console.log("im backend, putting new poll in database!");
-
-  const question = req.body.question;
-  const answers = req.body.answers;
-  
-  console.log("Question for be:", question);
-  console.log("Answers for be:", answers);
-
-  console.log("here is the data in backend i got: ",req.body);
-  res.redirect("/Records");
-});
-  */
 
 // POST route for submitting a question
 router.post("/submitQuestion", async (req, res) => {

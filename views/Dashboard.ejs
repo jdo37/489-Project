@@ -57,7 +57,9 @@
             },
           });
         </script>
+        <% if(userIsSignedIn) { %>
         <div>
+          <% if(!userHasVoted) { %>
           <form id="vote-form" action="/polls/<%= poll.id %>/vote" method="post">
             <div class="btn-group-vertical" role="group">
               <% for (let i = 0; i < data.length; i++) { %>
@@ -66,7 +68,14 @@
             </div>
             <input type="hidden" id="selected-answer" name="selectedAnswer" value="">
           </form>
+          <% } else {%>
+          <h3>You voted: <%= userVoteAnswer %>!</h3>
+          <h3> Come back tomorrow for a new Question of the day!</h3>
+          <% } %>
         </div>
+        <% } else { %>
+          <h3> Log in or register to make your voice heard!</h3>
+        <% } %>
       </div>
     </main>
     </div>

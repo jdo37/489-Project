@@ -66,8 +66,9 @@ async function setup() {
     
     
         // Create default poll questions
-        const poll1 = await Poll.create({ question: 'What is your favorite color?' });
+        
         const poll2 = await Poll.create({ question: 'What is your favorite sport?' });
+        const poll1 = await Poll.create({ question: 'What is your favorite color?' });
     
         // Create default poll answers
         const poll1Answer1 = await Answer.create({ answer: 'Red', pollId: poll1.id });
@@ -83,8 +84,8 @@ async function setup() {
     
         // Create default votes for poll 1
         const poll1Answer1Vote1 = await Vote.create({ userId: jason.username, pollId: poll1.id ,answerId: poll1Answer1.id });
-        //const poll1Answer1Vote2 = await Vote.create({ userId: tony.username, pollId: poll1.id ,answerId: poll1Answer2.id });
-        const poll1Answer1Vote3 = await Vote.create({ userId: julie.username, pollId: poll1.id ,answerId: poll1Answer1.id });
+        //const poll1Answer1Vote2 = await Vote.create({ userId: tony.username, pollId: poll1.id ,answerId: poll1Answer2.id }); // removed so that these users can vote on poll1
+        //const poll1Answer1Vote3 = await Vote.create({ userId: julie.username, pollId: poll1.id ,answerId: poll1Answer1.id }); // removed so that these users can vote on poll1
         const poll1Answer1Vote4 = await Vote.create({ userId: amy.username, pollId: poll1.id ,answerId: poll1Answer3.id });
         const poll1Answer1Vote5 = await Vote.create({ userId: mike.username, pollId: poll1.id ,answerId: poll1Answer3.id });
         const poll1Answer1Vote6 = await Vote.create({ userId: hannah.username, pollId: poll1.id ,answerId: poll1Answer3.id });

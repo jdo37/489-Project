@@ -15,9 +15,31 @@ router.get('/', async (req, res) => {
     console.log("main get function was accessed");
     console.log(Poll);
     try {
-        const poll = await Poll.findOne(); // fetch the first poll
+        //const poll = await Poll.findOne(); // fetch the first poll
+        const poll = await Poll.findOne({ order: [['createdAt', 'DESC']]}); // fetchj most recent poll
+
         const answers = await Answer.findAll({ where: { pollId: poll.id } }); // fetch all answers for the poll
-        
+                
+        // Check if the user has already voted
+        var userHasVoted = false;
+        var userVoteAnswer = "no answer yet";
+        var userIsSignedIn = false;
+
+        if (req.session.user) {
+          const userVote = await Vote.findOne({
+            where: { pollId: poll.id, userId: req.session.user.username },
+            include: { model: Answer }
+          });
+          if (userVote) {
+            userHasVoted = true;
+            userVoteAnswer = userVote.Answer.answer;
+          }
+          userIsSignedIn = true;
+        }
+
+        console.log(userHasVoted);
+        console.log(userVoteAnswer);
+
         const voteData = await Vote.findAll({
             where: { pollId: poll.id },
             include: { model: Answer }
@@ -29,45 +51,12 @@ router.get('/', async (req, res) => {
             vote_count: voteData.filter((vote) => vote.Answer.id === answer.id).length,
           }));
           
-        res.render('dashboard', { poll, data }); // pass the poll to the dashboard view
+        res.render('dashboard', { poll, data, userHasVoted, userVoteAnswer, userIsSignedIn }); // pass the poll to the dashboard view
       } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
       }
 });
-
-router.post('/polls/:id/vote', async (req, res) => {
-  const pollId = req.params.id;
-  const selectedAnswer = req.body.selectedAnswer;
-
-  console.log(selectedAnswer);
-  console.log(pollId);
-  console.log(req.session.user)
-
-  try {
-    // Find the answer object that matches the selected answer
-    const answer = await Answer.findOne({
-      where: { pollId: pollId, answer: selectedAnswer }
-    });
-
-    // Increment the vote count for the answer
-    answer.vote_count++;
-    await answer.save();
-
-    // Create a new vote object in the database
-    await Vote.create({
-      userId: req.session.user.username,
-      pollId: pollId,
-      answerId: answer.id
-    });
-
-    res.redirect('/');
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
 
 router.post('/polls/:id/vote', async (req, res) => {
   const pollId = req.params.id;
@@ -138,7 +127,7 @@ router.get('/Records', async (req, res) => {
   try {
     console.log("in record BE");
     // Fetch all the polls from the database
-    const polls = await Poll.findAll({ include: Answer });
+    const polls = await Poll.findAll({ include: Answer, order: [['createdAt', 'DESC']] });
 
     // Create an array to hold the questions and answers
     const questions = [];

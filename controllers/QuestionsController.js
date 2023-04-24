@@ -88,39 +88,6 @@ router.post('/polls/:id/vote', async (req, res) => {
 });
 
 
-router.post('/polls/:id/vote', async (req, res) => {
-  const pollId = req.params.id;
-  const selectedAnswer = req.body.selectedAnswer;
-
-  console.log(selectedAnswer);
-  console.log(pollId);
-  console.log(req.session.user)
-
-  try {
-    // Find the answer object that matches the selected answer
-    const answer = await Answer.findOne({
-      where: { pollId: pollId, answer: selectedAnswer }
-    });
-
-    // Increment the vote count for the answer
-    answer.vote_count++;
-    await answer.save();
-
-    // Create a new vote object in the database
-    await Vote.create({
-      userId: req.session.user.username,
-      pollId: pollId,
-      answerId: answer.id
-    });
-
-    res.redirect('/');
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-
 // Route for the Records page
 // Route handler for /Records endpoint
 /*

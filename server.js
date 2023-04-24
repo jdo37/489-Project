@@ -84,7 +84,7 @@ async function setup() {
         // Create default votes for poll 1
         const poll1Answer1Vote1 = await Vote.create({ userId: jason.username, pollId: poll1.id ,answerId: poll1Answer1.id });
         //const poll1Answer1Vote2 = await Vote.create({ userId: tony.username, pollId: poll1.id ,answerId: poll1Answer2.id });
-        const poll1Answer1Vote3 = await Vote.create({ userId: julie.username, pollId: poll1.id ,answerId: poll1Answer1.id });
+        //const poll1Answer1Vote3 = await Vote.create({ userId: julie.username, pollId: poll1.id ,answerId: poll1Answer1.id });
         const poll1Answer1Vote4 = await Vote.create({ userId: amy.username, pollId: poll1.id ,answerId: poll1Answer3.id });
         const poll1Answer1Vote5 = await Vote.create({ userId: mike.username, pollId: poll1.id ,answerId: poll1Answer3.id });
         const poll1Answer1Vote6 = await Vote.create({ userId: hannah.username, pollId: poll1.id ,answerId: poll1Answer3.id });

@@ -14,7 +14,9 @@ router.get('/', async (req, res) => {
     console.log("main get function was accessed");
     console.log(Poll);
     try {
-        const poll = await Poll.findOne(); // fetch the first poll
+        //const poll = await Poll.findOne(); // fetch the first poll
+        const poll = await Poll.findOne({ order: [['createdAt', 'DESC']]}); // fetchj most recent poll
+
         const answers = await Answer.findAll({ where: { pollId: poll.id } }); // fetch all answers for the poll
                 
         // Check if the user has already voted
@@ -124,7 +126,7 @@ router.get('/Records', async (req, res) => {
   try {
     console.log("in record BE");
     // Fetch all the polls from the database
-    const polls = await Poll.findAll({ include: Answer });
+    const polls = await Poll.findAll({ include: Answer, order: [['createdAt', 'DESC']] });
 
     // Create an array to hold the questions and answers
     const questions = [];

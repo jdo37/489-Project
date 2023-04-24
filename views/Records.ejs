@@ -28,7 +28,7 @@
         <% questions.forEach(function(question) { %>
           <tr>
             <td>
-              <%= question.id %>
+              <a href="/Records/<%= question.id %>"><%= question.id %></a>
             </td>
             <td>
               <%= question.question %>

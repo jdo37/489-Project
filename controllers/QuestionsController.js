@@ -5,6 +5,7 @@ const {questions}  = require('../models/question');
 const Poll = require('../models/poll');
 const Answer = require('../models/answer');
 const Vote = require('../models/vote');
+const User = require('../models/user')
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -174,7 +175,41 @@ router.get('/Records', async (req, res) => {
   }
 });
 
-
+router.get('/Records/:id', async function(req, res, next) {
+  const poll = await Poll.findByPk(req.params.id)
+  if(poll) {
+    const votes = await Vote.findAll({
+      where: {pollid: poll.id}
+    })
+    let users = []
+    for (let i = 0; i < votes.length; i++) {
+      var user = await User.findByPk(votes[i].userId)
+      users.push(user)
+    }
+    const continents = ["North America", "South America", "Africa", "Europe", "Antarctica", "Asia", "Australia"]
+    const genders = ["Male", "Female", "N/A"]
+    const counts = []
+    for (let i = 0; i < continents.length; i++) {
+      counts.push(users.filter(user => user.continent === continents[i]).length)
+    }
+    const gcounts = []
+    for (let i = 0; i < genders.length; i++) {
+      gcounts.push(users.filter(user => user.gender === genders[i]).length)
+    }
+    console.log(counts)
+    const question = {
+      id: poll.id,
+      question: poll.question,
+      counts: counts,
+      continents: continents,
+      genders: genders,
+      gcounts: gcounts
+    }
+    res.render('QuestionResults', {question})
+  } else {
+    res.redirect('/Records/?msg=poll+not+found&?pollid=' + req.params.pollid)
+  }
+})
 
 
 // Route for the Submit page

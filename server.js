@@ -64,11 +64,59 @@ async function setup() {
         const max = await User.create({ email: "max@gmail.com", username: "max", password: hash, gender: "Male", continent: "Africa" });
         const lisa = await User.create({ email: "lisa@gmail.com", username: "lisa", password: hash, gender: "Female", continent: "Europe" });
     
+        const user1 = await User.create({
+            email: 'user1@example.com',
+            username: 'user1',
+            password: hash,
+            gender: 'Male',
+            continent: 'North America'
+          });
+          
+          const user2 = await User.create({
+            email: 'user2@example.com',
+            username: 'user2',
+            password: hash,
+            gender: 'Female',
+            continent: 'Europe'
+          });
+          
+          const user3 = await User.create({
+            email: 'user3@example.com',
+            username: 'user3',
+            password: hash,
+            gender: 'Male',
+            continent: 'South America'
+          });
+          
+          const user4 = await User.create({
+            email: 'user4@example.com',
+            username: 'user4',
+            password: hash,
+            gender: 'Female',
+            continent: 'Asia'
+          });
+          
+          const user5 = await User.create({
+            email: 'user5@example.com',
+            username: 'user5',
+            password: hash,
+            gender: 'Male',
+            continent: 'Australia'
+          });
+          
+          const user6 = await User.create({
+            email: 'user6@example.com',
+            username: 'user6',
+            password: hash,
+            gender: 'Female',
+            continent: 'Africa'
+          });
     
         // Create default poll questions
         
         const poll2 = await Poll.create({ question: 'What is your favorite sport?' });
         const poll1 = await Poll.create({ question: 'What is your favorite color?' });
+        const poll3 = await Poll.create({ question: 'What is your favorite animal?'})
     
         // Create default poll answers
         const poll1Answer1 = await Answer.create({ answer: 'Red', pollId: poll1.id });
@@ -81,6 +129,13 @@ async function setup() {
         const poll2Answer1 = await Answer.create({ answer: 'Football', pollId: poll2.id });
         const poll2Answer2 = await Answer.create({ answer: 'Basketball', pollId: poll2.id });
         const poll2Answer3 = await Answer.create({ answer: 'Tennis', pollId: poll2.id });
+
+        // Create default poll answers for third poll
+        const poll3Answer1 = await Answer.create({ answer: 'Cat', pollId: poll3.id });
+        const poll3Answer2 = await Answer.create({ answer: 'Dog', pollId: poll3.id });
+        const poll3Answer3 = await Answer.create({ answer: 'Bird', pollId: poll3.id });
+        const poll3Answer4 = await Answer.create({ answer: 'Fish', pollId: poll3.id });
+        const poll3Answer5 = await Answer.create({ answer: 'Mouse', pollId: poll3.id });
     
         // Create default votes for poll 1
         const poll1Answer1Vote1 = await Vote.create({ userId: jason.username, pollId: poll1.id ,answerId: poll1Answer1.id });
@@ -91,6 +146,24 @@ async function setup() {
         const poll1Answer1Vote6 = await Vote.create({ userId: hannah.username, pollId: poll1.id ,answerId: poll1Answer3.id });
         const poll1Answer1Vote7 = await Vote.create({ userId: max.username, pollId: poll1.id ,answerId: poll1Answer4.id });
         const poll1Answer1Vote8 = await Vote.create({ userId: lisa.username, pollId: poll1.id ,answerId: poll1Answer4.id });
+        await Vote.create({ userId: user1.username, pollId: poll2.id ,answerId: poll2Answer3.id });
+        await Vote.create({ userId: user1.username, pollId: poll1.id ,answerId: poll1Answer1.id });
+        await Vote.create({ userId: user1.username, pollId: poll3.id ,answerId: poll3Answer1.id });
+        await Vote.create({ userId: user2.username, pollId: poll2.id ,answerId: poll2Answer1.id });
+        await Vote.create({ userId: user2.username, pollId: poll1.id ,answerId: poll1Answer1.id });
+        await Vote.create({ userId: user2.username, pollId: poll3.id ,answerId: poll3Answer2.id });
+        await Vote.create({ userId: user3.username, pollId: poll2.id ,answerId: poll2Answer2.id });
+        await Vote.create({ userId: user3.username, pollId: poll1.id ,answerId: poll1Answer4.id });
+        await Vote.create({ userId: user3.username, pollId: poll3.id ,answerId: poll3Answer5.id });
+        await Vote.create({ userId: user4.username, pollId: poll2.id ,answerId: poll2Answer3.id });
+        await Vote.create({ userId: user4.username, pollId: poll1.id ,answerId: poll1Answer4.id });
+        await Vote.create({ userId: user4.username, pollId: poll3.id ,answerId: poll3Answer1.id });
+        await Vote.create({ userId: user5.username, pollId: poll2.id ,answerId: poll2Answer3.id });
+        await Vote.create({ userId: user5.username, pollId: poll1.id ,answerId: poll1Answer2.id });
+        await Vote.create({ userId: user5.username, pollId: poll3.id ,answerId: poll3Answer3.id });
+        await Vote.create({ userId: user6.username, pollId: poll2.id ,answerId: poll2Answer1.id });
+        await Vote.create({ userId: user6.username, pollId: poll1.id ,answerId: poll1Answer2.id });
+        await Vote.create({ userId: user6.username, pollId: poll3.id ,answerId: poll3Answer4.id });
     
         console.log(poll1.id) //  checking the id of polls 1 asnd 2
         console.log(poll2.id)
